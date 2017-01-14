@@ -7,7 +7,6 @@
 # =============================================================================
 # GunGame
 from gungame.core.rules.instance import GunGameRules
-from gungame.core.rules.strings import rules_translations
 
 # Plugin
 from .info import info
@@ -17,3 +16,4 @@ from .info import info
 # >> RULES
 # =============================================================================
 knife_advanced_rules = GunGameRules(info.name)
+knife_advanced_rules.register_all_rules()

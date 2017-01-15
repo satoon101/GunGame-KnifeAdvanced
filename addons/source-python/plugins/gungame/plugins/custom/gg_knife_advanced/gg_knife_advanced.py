@@ -7,13 +7,17 @@
 # =============================================================================
 # Source.Python
 from events.hooks import EventAction, PreEvent
+from listeners.tick import Delay
 
 # GunGame
 from gungame.core.players.dictionary import player_dictionary
 
+# Plugin
+from .custom_events import GG_Level_Swapped
+
 
 # =============================================================================
-# >> GUNGAME EVENTS
+# >> GUNGAME PRE-EVENTS
 # =============================================================================
 @PreEvent('gg_knife_steal')
 def _pre_knife_steal(game_event):
@@ -24,22 +28,39 @@ def _pre_knife_steal(game_event):
     if difference <= 1:
         return EventAction.CONTINUE
 
-    levels = abs(difference)
+    levels = abs(difference) - 1
     killer = player_dictionary[game_event['attacker']]
     victim = player_dictionary[game_event['victim']]
-    killer.increase_level(
-        levels=levels,
-        reason='swap',
-        victim=victim.userid,
-        delay=True,
+
+    Delay(
+        delay=0,
+        callback=killer.increase_level,
+        kwargs={
+            'levels': levels,
+            'reason': 'swap',
+            'victim': victim.userid,
+        },
     )
-    victim.decrease_level(
-        levels=levels,
-        reason='swap',
-        attacker=killer.userid,
-        delay=True,
+    Delay(
+        delay=0,
+        callback=victim.decrease_level,
+        kwargs={
+            'levels': levels,
+            'reason': 'swap',
+            'attacker': killer.userid,
+        }
     )
-    return EventAction.BLOCK
+    Delay(
+        delay=0,
+        callback=_fire_swap_event,
+        kwargs={
+            'killer': killer.userid,
+            'killer_level': previous_victim_level,
+            'victim': victim.userid,
+            'victim_level': previous_attacker_level,
+        }
+    )
+    return EventAction.CONTINUE
 
 
 @PreEvent('gg_level_up')
@@ -72,3 +93,14 @@ def _pre_level_down(game_event):
         return EventAction.CONTINUE
 
     return EventAction.BLOCK
+
+
+# =============================================================================
+# >> HELPER FUNCTIONS
+# =============================================================================
+def _fire_swap_event(killer, killer_level, victim, victim_level):
+    with GG_Level_Swapped() as event:
+        event.attacker = event.leveler = killer
+        event.attacker_level = killer_level
+        event.userid = event.victim = victim
+        event.victim_level = victim_level

@@ -39,6 +39,7 @@ def _pre_knife_steal(game_event):
             'levels': levels,
             'reason': 'swap',
             'victim': victim.userid,
+            'sound_name': 'swapped_up',
         },
     )
     Delay(
@@ -48,6 +49,7 @@ def _pre_knife_steal(game_event):
             'levels': levels,
             'reason': 'swap',
             'attacker': killer.userid,
+            'sound_name': 'swapped_down',
         }
     )
     Delay(

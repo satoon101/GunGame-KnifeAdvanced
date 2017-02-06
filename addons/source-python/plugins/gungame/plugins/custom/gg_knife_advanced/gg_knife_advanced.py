@@ -1,6 +1,6 @@
 # ../gungame/plugins/custom/gg_knife_advanced/gg_knife_advanced.py
 
-"""."""
+"""Plugin that allows players to swap levels when they steal."""
 
 # =============================================================================
 # >> IMPORTS

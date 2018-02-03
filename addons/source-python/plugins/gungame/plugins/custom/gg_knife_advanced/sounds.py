@@ -1,4 +1,4 @@
-# ../gungame/plugins/included/gg_knife_advanced/sounds.py
+# ../gungame/plugins/custom/gg_knife_advanced/sounds.py
 
 """Register knife advanced sounds."""
 

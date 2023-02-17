@@ -27,6 +27,7 @@ __all__ = (
 # =============================================================================
 # >> CLASSES
 # =============================================================================
+# pylint: disable=too-few-public-methods
 class GG_Level_Swapped(CustomEvent):
     """Called when a player steals a level by knifing."""
 

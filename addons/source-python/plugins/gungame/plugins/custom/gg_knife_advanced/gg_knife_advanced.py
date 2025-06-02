@@ -36,7 +36,7 @@ def _pre_knife_steal(game_event):
             "victim": game_event["victim"],
             "victim_level": previous_attacker_level,
             "levels": abs(difference) - 1,
-        }
+        },
     )
     return EventAction.CONTINUE
 
